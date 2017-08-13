@@ -1,0 +1,4 @@
+#!/bin/bash
+source helper
+
+docker run -p 80:80 --dns 192.168.2.89 --rm -v `pwd`:/docker -it ${IMAGE} bash

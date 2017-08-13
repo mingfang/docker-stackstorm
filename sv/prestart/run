@@ -1,0 +1,13 @@
+#!/bin/bash
+
+source /etc/envvars
+
+# Auth config
+echo $ST2_AUTH_USERNAME | sudo htpasswd -i /etc/st2/htpasswd $ST2_AUTH_PASSWORD
+
+# ST2 config
+envsubst < /etc/template/st2.conf > /etc/st2/st2.conf
+envsubst < /etc/template/mistral.conf > /etc/mistral/mistral.conf
+
+exec 2>&1
+exec sleep infinity

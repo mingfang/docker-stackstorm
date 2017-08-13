@@ -1,0 +1,10 @@
+#!/bin/bash
+
+sv start prestart || sleep 1 || exit 1
+
+source /etc/envvars
+
+mkdir -p /var/nginx/cache && chown nobody /var/nginx/cache
+
+exec 2>&1
+exec /usr/sbin/nginx -g "daemon off;"

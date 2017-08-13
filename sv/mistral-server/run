@@ -1,0 +1,14 @@
+#!/bin/bash
+
+sv start prestart || sleep 1 || exit 1
+
+source /etc/envvars
+
+# Setup Mistral DB tables, etc.
+/opt/stackstorm/mistral/bin/mistral-db-manage --config-file /etc/mistral/mistral.conf upgrade head
+
+# Register mistral actions
+/opt/stackstorm/mistral/bin/mistral-db-manage --config-file /etc/mistral/mistral.conf populate
+
+exec 2>&1
+exec /opt/stackstorm/mistral/bin/mistral-server --config-dir /etc/mistral/

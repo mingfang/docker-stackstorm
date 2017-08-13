@@ -1,0 +1,8 @@
+#!/bin/bash
+
+sv start prestart || sleep 1 || exit 1
+
+source /etc/envvars
+
+exec 2>&1
+exec  /opt/stackstorm/st2/bin/st2resultstracker --config-dir /etc/st2/
