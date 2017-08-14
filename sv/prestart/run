@@ -9,5 +9,7 @@ echo $ST2_AUTH_USERNAME | sudo htpasswd -i /etc/st2/htpasswd $ST2_AUTH_PASSWORD
 envsubst < /etc/template/st2.conf > /etc/st2/st2.conf
 envsubst < /etc/template/mistral.conf > /etc/mistral/mistral.conf
 
+mkdir -p /var/log/{st2,mistral,st2chatops}
+
 exec 2>&1
 exec sleep infinity

@@ -56,8 +56,8 @@ ENV ST2_AUTH_USERNAME=admin \
 
 # ST2 config
 ENV MONGODB_HOST=stackstorm-mongodb \
-    RABBITMQ_URL=rabbit://admin:admin@stackstorm-rabbitmq:5672/ \
-    AMQP_URL=amqp://admin:admin@stackstorm-rabbitmq:5672/ \
+    RABBITMQ_URL=rabbit://admin:admin@stackstorm-rabbitmq:5672 \
+    AMQP_URL=amqp://admin:admin@stackstorm-rabbitmq:5672 \
     POSTGRES_URL=postgresql://mistral:StackStorm@stackstorm-postgres/mistral
 
 # ChatOps config
