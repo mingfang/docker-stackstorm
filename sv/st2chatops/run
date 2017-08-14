@@ -1,11 +1,18 @@
 #!/bin/bash
 
-sv start prestart || sleep 1 || exit 1
+sv start prestart && sleep 1 || exit 1
+sv start st2auth && sleep 1 || exit 1
+sv start st2api && sleep 1 || exit 1
+sv start st2stream && sleep 1 || exit 1
 
 source /etc/envvars
 
 export ST2_AUTH_TOKEN=`st2 auth -t -p $ST2_AUTH_PASSWORD $ST2_AUTH_USERNAME`
 export ST2_API_KEY=`st2 apikey create -k`
+export ST2_API="${ST2_API:-http://127.0.0.1/api}"
+export ST2_AUTH_URL="${ST2_AUTH_URL:-http://127.0.0.1/auth}"
+
+cd /opt/stackstorm/chatops
 
 exec 2>&1
-exec /opt/stackstorm/chatops/bin/hubot
+exec ./bin/hubot
