@@ -7,10 +7,14 @@ sv start st2stream && sleep 1 || exit 1
 
 source /etc/envvars
 
-export ST2_AUTH_TOKEN=`st2 auth -t -p $ST2_AUTH_PASSWORD $ST2_AUTH_USERNAME`
-export ST2_API_KEY=`st2 apikey create -k`
 export ST2_API="${ST2_API:-http://127.0.0.1/api}"
 export ST2_AUTH_URL="${ST2_AUTH_URL:-http://127.0.0.1/auth}"
+
+until curl $ST2_API; do echo "waiting for $ST2_API to come online..."; sleep 3; done;
+until curl $ST2_AUTH_URL; do echo "waiting for $ST2_AUTH_URL to come online..."; sleep 3; done;
+
+export ST2_AUTH_TOKEN=`st2 auth -t -p $ST2_AUTH_PASSWORD $ST2_AUTH_USERNAME`
+export ST2_API_KEY=`st2 apikey create -k -m '{"used_by": "st2chatops"}'`
 
 cd /opt/stackstorm/chatops
 
