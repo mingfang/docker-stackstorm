@@ -8,7 +8,7 @@ source /etc/envvars
 /opt/stackstorm/mistral/bin/mistral-db-manage --config-file /etc/mistral/mistral.conf upgrade head
 
 # Register mistral actions
-/opt/stackstorm/mistral/bin/mistral-db-manage --config-file /etc/mistral/mistral.conf populate
+/opt/stackstorm/mistral/bin/mistral-db-manage --config-file /etc/mistral/mistral.conf populate | grep -v openstack
 
 exec 2>&1
 exec /opt/stackstorm/mistral/bin/mistral-server --config-dir /etc/mistral/
