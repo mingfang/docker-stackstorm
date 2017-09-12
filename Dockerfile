@@ -29,7 +29,7 @@ RUN apt-get install -y nginx
 RUN apt-get install -y apache2-utils
 
 # ChatOps
-RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 RUN apt-get install -y st2chatops
 
 # Setup system user
