@@ -1,0 +1,64 @@
+namespaces:
+  {{namespace}}:
+    services:
+    - name: stackstorm-demo
+      ports:
+      - {port: 80, name: http}
+      annotations:
+        nginx:
+        - http:
+          - server: stackstorm.{{namespace}}.*
+            port: 80
+            paths:
+            - path: /
+      pod:
+        replicas: 1
+        containers:
+        - name: stackstorm
+          image: registry.rebelsoft.com/stackstorm:latest
+
+    - name: stackstorm-rabbitmq
+      ports:
+      - {port: 5672, name: amqp}
+      - {port: 25672, name: clustering}
+      - {port: 15672, name: management}
+      pod:
+        replicas: 1
+        containers:
+        - name: rabbitmq
+          image: registry.rebelsoft.com/rabbitmq:latest
+
+    - name: stackstorm-mongodb
+      ports:
+      - port: 27017
+      stateful: true
+      pod:
+        replicas: 1
+        containers:
+        - name: mongodb
+          image: registry.rebelsoft.com/mongodb:latest
+
+    - name: stackstorm-postgres
+      ports:
+      - port: 5432
+      stateful: true
+      pod:
+        replicas: 1
+        containers:
+        - name: postgres
+          image: registry.rebelsoft.com/postgres:latest
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                - bash
+                - -cx
+                - |
+                  until psql -U postgres --command="select 1;";do echo "waiting for postgres..."; sleep 3; done
+
+                  psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'mistral'" | grep -q 1;
+                  if [ $? -eq 1 ]; then
+                    psql -U postgres -c "CREATE ROLE mistral WITH CREATEDB LOGIN ENCRYPTED PASSWORD 'StackStorm'";
+                    psql -U postgres -c "CREATE DATABASE mistral OWNER mistral";
+                  fi;
+
